@@ -1,0 +1,1 @@
+export { default as GNAP } from "./components/GNAP.vue"

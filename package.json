@@ -1,0 +1,53 @@
+{
+  "name": "vue3-gnap",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/vue3-gnap.umd.cjs",
+  "module": "./dist/vue3-gnap.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/vue3-gnap.js",
+      "require": "./dist/vue3-gnap.umd.js"
+    },
+    "./dist/style.css": "./dist/style.css"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "types": "vue-tsc",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@ltonetwork/http-message-signatures": "^0.1.8",
+    "beercss": "^3.6.4",
+    "crypto-random-string": "^5.0.0",
+    "http-message-signatures": "^0.1.2",
+    "jose": "^5.6.2",
+    "object-path": "^0.11.8",
+    "typed-ls": "^0.2.0",
+    "uuid": "^10.0.0",
+    "vue": "^3.4.29"
+  },
+  "devDependencies": {
+    "@rollup/plugin-terser": "^0.4.4",
+    "@types/object-path": "^0.11.4",
+    "@types/uuid": "^10.0.0",
+    "@vitejs/plugin-vue": "^5.0.5",
+    "rollup": "^4.18.0",
+    "rollup-plugin-delete": "^2.0.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-typescript2": "^0.36.0",
+    "rollup-plugin-vue": "^6.0.0",
+    "sass": "^1.77.6",
+    "typescript": "^5.2.2",
+    "vite": "^5.3.1",
+    "vite-plugin-dts": "^3.9.1",
+    "vue-tsc": "^2.0.21"
+  }
+}
