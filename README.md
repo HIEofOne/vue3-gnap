@@ -1,7 +1,7 @@
 # A Vue3 component to make GNAP/PDAP authorization requests (Client Instance) to a GNAP authorization server
 
 [![Latest Version on NPM](https://img.shields.io/npm/v/vue3-gnap.svg?style=flat-square)](https://npmjs.com/package/vue3-gnap)
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://github.com/HIEofOne/vue3-gnap/blob/main/README.md)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://github.com/HIEofOne/vue3-gnap/blob/main/LICENSE)
 [![npm](https://img.shields.io/npm/dt/vue3-gnap.svg?style=flat-square)](https://www.npmjs.com/package/vue3-gnap)
 
 The package contains a [Vue 3](https://vuejs.org/) component to easily display some tabs.
