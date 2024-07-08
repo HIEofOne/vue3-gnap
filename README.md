@@ -4,9 +4,9 @@
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://github.com/HIEofOne/vue3-gnap/blob/main/LICENSE)
 [![npm](https://img.shields.io/npm/dt/vue3-gnap.svg?style=flat-square)](https://www.npmjs.com/package/vue3-gnap)
 
-The package contains a [Vue 3](https://vuejs.org/) component to easily display some tabs.
+The package contains a [Vue 3](https://vuejs.org/) component to easily make GNAP authorization requests to a GNAP authorization server for access to GNAP-protected resources.
 
-This is how they can be used:
+This is how it can be used:
 =
 ```html
 <div>
