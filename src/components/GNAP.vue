@@ -37,7 +37,7 @@ export default defineComponent({
   },
   props: {
     helper: { type: String, required: false },
-    location: { type: String, required: true },
+    access: { type: Array, default: function () { return []}, required: true },
     server: { type: String, required: true }
   },
   emits: ['on-authorized', 'jwt'],
@@ -132,7 +132,7 @@ export default defineComponent({
     const submit = async() => {
       state.loading = true
       const url = new URL(window.location.href)
-      const tx_return = await tx(props.location, url.origin, props.server, 'App')
+      const tx_return = await tx(props.access, url.origin, props.server)
       if (tx_return.status === 'success') {
         window.location.href = tx_return.data.interact.redirect
       } else {

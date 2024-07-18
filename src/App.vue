@@ -1,11 +1,29 @@
 <script setup lang="ts">
   import 'beercss'
-  function showJWT(jwt:string) {
+
+  async function showJWT(jwt:string) {
     console.log(jwt)
+    const opts = {
+      method: "GET",
+      headers: {
+        'Content-type': 'text/plain',
+        'Authorization': `Bearer ${jwt}`
+      }
+    }
+    const result = await fetch("https://nosh-app-mj3xd.ondigitalocean.app/api/nosh_2c23641c-c1b4-4f5c-92e8-c749c54a34da/Timeline", opts).then((res) => res.text())
+    console.log(result)
   }
   function showAuth() {
     console.log("I'm authorized!")
   }
+  const access = [
+    {
+      "type": "Timeline",
+      "actions": ["read"],
+      "locations": ["https://nosh-app-mj3xd.ondigitalocean.app/api/nosh_2c23641c-c1b4-4f5c-92e8-c749c54a34da/Timeline"],
+      "purpose": "Clinical - Routine"
+    }
+  ]
 </script>
 
 <template>
@@ -22,7 +40,7 @@
       @on-authorized="showAuth"
       @jwt="showJWT"
       helper="blue large" 
-      location="https://nosh-app-mj3xd.ondigitalocean.app/app/chart/nosh_2c23641c-c1b4-4f5c-92e8-c749c54a34da"
+      :access="access"
       server="https://shihjay.xyz/api/as"
     />
   </div>

@@ -198,21 +198,14 @@ export function core() {
   const sleep = async(seconds: number) => {
     return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
   }
-  const tx = async(location: string, client_uri: string, server_uri_root: string, type:string) => {
+  const tx = async(access: unknown[], client_uri: string, server_uri_root: string) => {
     const gnap_store = gnap.get()
     console.log(server_uri_root)
     const endpoint = await fetch(url_fix(server_uri_root) + '/.well-known/gnap-as-rs')
       .then((res) => res.json())
     const body = {
       "access_token": {
-        "access": [
-          {
-            "type": type,
-            "actions": ["read", "write"],
-            "locations": [location],
-            "purpose": "Clinical - Routine"
-          }
-        ]
+        "access": access
       },
       "interact": {
         "start": ["redirect"],

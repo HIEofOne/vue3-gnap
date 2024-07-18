@@ -13,10 +13,21 @@ This is how it can be used:
   <GNAP @on-authorized="showAuth"
     @jwt="showJWT"
     helper="blue large" 
-    location="https://nosh-app-mj3xd.ondigitalocean.app/app/chart/nosh_2c23641c-c1b4-4f5c-92e8-c749c54a34da"
+    :access="access"
     server="https://shihjay.xyz/api/as"
   />
 </div>
+```
+where the access prop is an array structured as:
+```
+[
+  {
+    "type": "App",
+    "actions": ["read", "write"],
+    "locations": ["https://nosh-app-mj3xd.ondigitalocean.app/app/chart/nosh_2c23641c-c1b4-4f5c-92e8-c749c54a34da"],
+    "purpose": "Clinical - Routine"
+  }
+]
 ```
 
 ## Installation
@@ -93,6 +104,14 @@ Example for how use the callback:
   function showAuth() {
     console.log("I'm authorized!")
   }
+  const access = [
+    {
+      "type": "App",
+      "actions": ["read", "write"],
+      "locations": ["https://nosh-app-mj3xd.ondigitalocean.app/app/chart/nosh_2c23641c-c1b4-4f5c-92e8-c749c54a34da"],
+      "purpose": "Clinical - Routine"
+    }
+  ]
 </script>
 ```
 ```html
@@ -100,7 +119,7 @@ Example for how use the callback:
   <GNAP @on-authorized="showAuth"
     @jwt="showJWT"
     helper="blue large" 
-    location="https://nosh-app-mj3xd.ondigitalocean.app/app/chart/nosh_2c23641c-c1b4-4f5c-92e8-c749c54a34da"
+    :access="access"
     server="https://shihjay.xyz/api/as"
   />
 </template>
