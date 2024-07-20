@@ -12,6 +12,16 @@
     }
     const result = await fetch("https://nosh-app-mj3xd.ondigitalocean.app/api/nosh_2c23641c-c1b4-4f5c-92e8-c749c54a34da/Timeline", opts).then((res) => res.text())
     console.log(result)
+    const opts1 = {
+      method: "PUT",
+      headers: {
+        'Content-type': 'application/json',
+        'Authorization': `Bearer ${jwt}`
+      },
+      body: JSON.stringify({content: result})
+    }
+    const result1 = await fetch("https://nosh-app-mj3xd.ondigitalocean.app/api/nosh_2c23641c-c1b4-4f5c-92e8-c749c54a34da/md", opts1).then((res) => res.json())
+    console.log(result1)
   }
   function showAuth() {
     console.log("I'm authorized!")
@@ -21,6 +31,12 @@
       "type": "Timeline",
       "actions": ["read"],
       "locations": ["https://nosh-app-mj3xd.ondigitalocean.app/api/nosh_2c23641c-c1b4-4f5c-92e8-c749c54a34da/Timeline"],
+      "purpose": "Clinical - Routine"
+    },
+    {
+      "type": "Markdown",
+      "actions": ["write"],
+      "locations": ["https://nosh-app-mj3xd.ondigitalocean.app/api/nosh_2c23641c-c1b4-4f5c-92e8-c749c54a34da/md"],
       "purpose": "Clinical - Routine"
     }
   ]
