@@ -87,7 +87,7 @@ export default defineComponent({
             return String.fromCharCode(val)
           }).join('')).replace(/\+/g, '-').replace(/\//g, '_').replace(/\=/g, '')
           if (hash_data === current_url.searchParams.get('hash')) {
-            const continue_tx_return = await continue_tx(state.gnap_store.interact.interact_ref, current_url.origin, props.server)
+            const continue_tx_return = await continue_tx(state.gnap_store.interact.interact_ref, current_url.origin)
             if (continue_tx_return.status === 'success') {
               emit('on-authorized')
               emit('jwt', continue_tx_return.data.access_token.value)

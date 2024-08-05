@@ -28,7 +28,7 @@ class Signer {
 }
 
 export function core() {
-  const continue_tx = async(interact_ref: string, client_uri: string, server_uri_root: string) => {
+  const continue_tx = async(interact_ref: string, client_uri: string) => {
     const gnap_store = gnap.get()
     const body = {"interact_ref": interact_ref}
     const signedRequest = await sign_request(body, client_uri, 'POST', gnap_store.interact.continue.uri, gnap_store.interact.continue.access_token.value)
@@ -54,7 +54,7 @@ export function core() {
       if (objectPath.has(doc, 'access_token.subject')) {
         objectPath.set(gnap_store, 'jwt', doc.access_token.value)
         gnap.set(gnap_store)
-        const verify_results:any = await verify_jwt(doc.access_token.value, url_fix(server_uri_root))
+        const verify_results:any = await verify_jwt(doc.access_token.value, url_fix(gnap_store.gnap_server))
         if (verify_results.status === 'isValid') {
           return {
             status: 'success',
@@ -200,9 +200,30 @@ export function core() {
   }
   const tx = async(access: unknown[], client_uri: string, server_uri_root: string) => {
     const gnap_store = gnap.get()
-    console.log(server_uri_root)
-    const endpoint = await fetch(url_fix(server_uri_root) + '/.well-known/gnap-as-rs')
-      .then((res) => res.json())
+    console.log(access)
+    var method = 'GET'
+    var server_discovery = false
+    var server_uri = ''
+    if (objectPath.get(access, '0.actions').includes('write')) {
+      method = 'PUT'
+    }
+    const gnap_url = await fetch(objectPath.get(access, '0.locations.0'), {
+      method: method
+    }).then((res) => res.headers.get('WWW-Authenticate'))
+    const gnap_url_items = gnap_url?.split('=')
+    if (gnap_url_items !== undefined) {
+      if (gnap_url_items[0] === 'GNAP as_uri') {
+        server_uri = gnap_url_items[1]
+        server_discovery = true
+        objectPath.set(gnap_store, 'gnap_server', server_uri.replace('/tx', ''))
+      }
+    }
+    gnap.set(gnap_store)
+    if (!server_discovery) {
+      const endpoint = await fetch(url_fix(server_uri_root) + '/.well-known/gnap-as-rs')
+        .then((res) => res.json())
+      server_uri = endpoint.grant_request_endpoint
+    }
     const body = {
       "access_token": {
         "access": access
@@ -216,13 +237,13 @@ export function core() {
         }
       }
     }
-    const signedRequest = await sign_request(body, client_uri, 'POST', endpoint.grant_request_endpoint)
+    const signedRequest = await sign_request(body, client_uri, 'POST', server_uri)
     try {
       const doc = await fetch(signedRequest)
         .then((res) => res.json())
       objectPath.set(gnap_store, 'interact', {
         ...doc,
-        route: url_fix(server_uri_root) + '/tx',
+        route: server_uri,
         nonce: objectPath.get(body, 'interact.finish.nonce'),
         interact_ref: doc.interact.redirect.substring(doc.interact.redirect.lastIndexOf('/') + 1)
       })
