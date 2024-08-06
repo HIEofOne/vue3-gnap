@@ -73,9 +73,7 @@ export default defineComponent({
           emit('on-authorized')
           emit('jwt', state.gnap_store.jwt)
         } else {
-          const redirect = state.gnap_store.url
-          logout_gnap()
-          window.location.href = redirect
+          await logout_gnap()
         }
       }
       const current_url = new URL(window.location.href)
@@ -124,9 +122,10 @@ export default defineComponent({
     watch(() => state.gnap_store, async(newVal) => {
       gnap.set(newVal)
     },{deep: true})
-    const logout_gnap = () => {
+    const logout_gnap = async() => {
       const redirect = state.gnap_store.url
       logout()
+      await sleep(5)
       window.location.href = redirect
     }
     const submit = async() => {
