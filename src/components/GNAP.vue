@@ -38,7 +38,8 @@ export default defineComponent({
   props: {
     helper: { type: String, required: false },
     access: { type: Array, default: function () { return []}, required: true },
-    server: { type: String, required: true }
+    server: { type: String, required: true },
+    name: { type: String, required: true }
   },
   emits: ['on-authorized', 'jwt'],
   setup (props, {emit}) {
@@ -110,6 +111,7 @@ export default defineComponent({
         const url = new URL(window.location.href)
         state.gnap_store.url = url
         state.gnap_store.gnap_server = props.server
+        state.gnap_store.client_name = props.name
       }
       state.helper = props.helper
       state.loading = false
@@ -131,7 +133,7 @@ export default defineComponent({
     const submit = async() => {
       state.loading = true
       const url = new URL(window.location.href)
-      const tx_return = await tx(props.access, url.origin, props.server)
+      const tx_return = await tx(props.access, url.origin, props.server, props.name)
       if (tx_return.status === 'success') {
         window.location.href = tx_return.data.interact.redirect
       } else {

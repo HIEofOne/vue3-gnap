@@ -4,6 +4,7 @@ import { JWK } from 'jose'
 const defaultValue = {
   jwt: '',
   gnap_server: '',
+  client_name: '',
   keys: {
     publicKey: {} as JWK,
     privateKey: {} as JWK,
@@ -30,6 +31,7 @@ export const gnap = createStoredValue('gnap', defaultValue)
 export type RootState = {
   jwt: string,
   gnap_server: string,
+  client_name: string,
   keys: {
     publicKey: JWK,
     privateKey: JWK,

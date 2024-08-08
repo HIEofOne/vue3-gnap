@@ -31,7 +31,7 @@ export function core() {
   const continue_tx = async(interact_ref: string, client_uri: string) => {
     const gnap_store = gnap.get()
     const body = {"interact_ref": interact_ref}
-    const signedRequest = await sign_request(body, client_uri, 'POST', gnap_store.interact.continue.uri, gnap_store.interact.continue.access_token.value)
+    const signedRequest = await sign_request(body, client_uri, 'POST', gnap_store.interact.continue.uri, gnap_store.client_name, gnap_store.interact.continue.access_token.value)
     try {
       const doc = await fetch(signedRequest)
         .then((res) => res.json())
@@ -150,7 +150,7 @@ export function core() {
     gnap.set(gnap_store)
     return true
   }
-  const sign_request = async(doc:object, client_uri:string, method:string, server_uri:string, auth:string='') => {
+  const sign_request = async(doc:object, client_uri:string, method:string, server_uri:string, client_name:string, auth:string='') => {
     const gnap_store = gnap.get()
     var gnap_keys = gnap_store.keys
     if (!objectPath.has(gnap_keys, 'privateKey.kty')) {
@@ -161,7 +161,7 @@ export function core() {
       ...doc,
       "client": {
         "display": {
-          "name": "NOSH",
+          "name": client_name,
           "uri": client_uri
         },
         "key": {
@@ -198,7 +198,7 @@ export function core() {
   const sleep = async(seconds: number) => {
     return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
   }
-  const tx = async(access: unknown[], client_uri: string, server_uri_root: string) => {
+  const tx = async(access: unknown[], client_uri: string, server_uri_root: string, client_name: string) => {
     const gnap_store = gnap.get()
     console.log(access)
     var method = 'GET'
@@ -237,7 +237,7 @@ export function core() {
         }
       }
     }
-    const signedRequest = await sign_request(body, client_uri, 'POST', server_uri)
+    const signedRequest = await sign_request(body, client_uri, 'POST', server_uri, client_name)
     try {
       const doc = await fetch(signedRequest)
         .then((res) => res.json())

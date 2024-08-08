@@ -58,6 +58,7 @@
       helper="blue large" 
       :access="access"
       server="https://shihjay.xyz/api/as"
+      name="Test Client"
     />
   </div>
 </template>

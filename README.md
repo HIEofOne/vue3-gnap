@@ -49,8 +49,8 @@ npm install vue3-gnap --save
 The most common use case is to register the components globally:
 
 ```js
-import {createApp} from 'vue'
-import {GNAP} from 'vue3-gnap';
+import { createApp } from 'vue'
+import { GNAP } from 'vue3-gnap';
 import "vue3-gnap/dist/style.css";
 
 createApp(App)
@@ -62,7 +62,7 @@ Alternatively you can do this to register the components:
 
 ```js
 import Vue from 'vue';
-import {GNAP} from 'vue3-gnap';
+import { GNAP } from 'vue3-gnap';
 import "vue3-gnap/dist/style.css";
 
 Vue.component('GNAP', GNAP);
@@ -72,7 +72,7 @@ Or inside another component:
 
 ```js
 import { defineComponent } from 'vue';
-import {GNAP} from 'vue3-gnap';
+import { GNAP } from 'vue3-gnap';
 import "vue3-gnap/dist/style.css";
 
 export default defineComponent({
@@ -121,6 +121,7 @@ Example for how use the callback:
     helper="blue large" 
     :access="access"
     server="https://shihjay.xyz/api/as"
+    name="Test Client"
   />
 </template>
 ```
