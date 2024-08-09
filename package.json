@@ -1,7 +1,7 @@
 {
   "name": "vue3-gnap",
   "private": false,
-  "version": "1.0.9",
+  "version": "1.0.10",
   "author": "Michael Shihjay Chen",
   "license": "MIT",
   "description": "A Vue3 component to make GNAP/PDAP authorization requests (Client Instance) to a GNAP authorization server",
