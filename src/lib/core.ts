@@ -106,7 +106,7 @@ export function core() {
       if (objectPath.has(outside_key, 'key')) {
         keys.push(objectPath.get(outside_key, 'key'))
       }
-      var gnap_keys = gnap_store.keys
+      let gnap_keys = gnap_store.keys
       if (!objectPath.has(gnap_keys, 'privateKey.kty')) {
         gnap_keys = await create_key_pair()
       }
@@ -152,7 +152,7 @@ export function core() {
   }
   const sign_request = async(doc:object, client_uri:string, method:string, server_uri:string, client_name:string, auth:string='') => {
     const gnap_store = gnap.get()
-    var gnap_keys = gnap_store.keys
+    let gnap_keys = gnap_store.keys
     if (!objectPath.has(gnap_keys, 'privateKey.kty')) {
       gnap_keys = await create_key_pair()
     }
@@ -201,9 +201,9 @@ export function core() {
   const tx = async(access: unknown[], client_uri: string, server_uri_root: string, client_name: string) => {
     const gnap_store = gnap.get()
     console.log(access)
-    var method = 'GET'
-    var server_discovery = false
-    var server_uri = ''
+    let method = 'GET'
+    let server_discovery = false
+    let server_uri = ''
     if (objectPath.get(access, '0.actions').includes('write')) {
       method = 'PUT'
     }
@@ -265,8 +265,8 @@ export function core() {
   const verify_jwt = async(jwt: string, server_uri: string) => {
     const keys:any = await get_all_keys(server_uri)
     const response = {}
-    var found = 0
-    for (var a in keys.keys) {
+    let found = 0
+    for (const a in keys.keys) {
       const jwk = await jose.importJWK(keys.keys[a])
       try {
         const { payload, protectedHeader } = await jose.jwtVerify(jwt, jwk)
