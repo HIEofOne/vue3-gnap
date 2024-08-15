@@ -13,6 +13,7 @@ This is how it can be used:
   <GNAP @on-authorized="showAuth"
     @jwt="showJWT"
     helper="blue large" 
+    label="Click This"
     :access="access"
     server="https://shihjay.xyz/api/as"
     name="Test Client"
@@ -89,8 +90,9 @@ Make sure to include the css as indicated in the examples above!
 ### Props:
 1.  `location`: URL of the resource governed by policies set on the GNAP/PDAP authorization server.
 2.  `server`:  URL of a GNAP/PDAP authorization server (Trustee).  This is typically the root domain without an endpoint/path ('/api/as/tx') as thie component figures this out based on the step of the GNAP workflow.
-3.  `helper`:  Button customization can be acheived by reviewing the [Beer CSS Helpers](https://github.com/beercss/beercss/blob/main/docs/HELPERS.md) to use in the helper prop for the GNAP component.
-4.  `name`: Human readable name of your GNAP Client
+3.  `helper` (optional):  Button customization can be acheived by reviewing the [Beer CSS Helpers](https://github.com/beercss/beercss/blob/main/docs/HELPERS.md) to use in the helper prop for the GNAP component.  (Default: secondary)
+4.  `label` (optional): Button label (Default: Sign In to Trustee Authorization Server)
+5.  `name`: Human readable name of your GNAP Client
 
 
 ### Callbacks:

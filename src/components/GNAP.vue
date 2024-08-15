@@ -1,7 +1,7 @@
 <template>
   <button v-if="state.show_button" :class="state.helper" @click="submit">
     <i>key</i>
-    <span>Sign In to Trustee Authorization Server</span>
+    <span>{{ state.button_text }}</span>
   </button>
   <button v-if="state.show_logout" :class="state.helper" @click="logout_gnap">
     <i>logout</i>
@@ -37,6 +37,7 @@ export default defineComponent({
   },
   props: {
     helper: { type: String, required: false },
+    label: { type: String, required: false},
     access: { type: Array, default: function () { return []}, required: true },
     server: { type: String, required: true },
     name: { type: String, required: true }
@@ -54,18 +55,26 @@ export default defineComponent({
       alert: string; 
       show_logout: boolean;
       gnap_store: RootState;
+      button_text: string | undefined;
     }>({
       loading: false,
       value: '',
       helper: 'secondary',
-      show_button: true,
+      show_button: false,
       show_alert: false,
       alert: '',
       show_logout: false,
-      gnap_store: gnap.get()
+      gnap_store: gnap.get(),
+      button_text: 'Sign In to Trustee Authorization Server'
     })
     onMounted(async() => {
       state.loading = true
+      if (props.helper !== undefined) {
+        state.helper = props.helper
+      }
+      if (props.label !== undefined) {
+        state.button_text = props.label
+      }
       if (state.gnap_store.jwt !== '') {
         const verify_results:any = await verify_jwt(state.gnap_store.jwt, props.server)
         if (verify_results.status === 'isValid') {
@@ -76,6 +85,8 @@ export default defineComponent({
         } else {
           await logout_gnap()
         }
+      } else {
+        state.show_button = true
       }
       const current_url = new URL(window.location.href)
       if (current_url.searchParams.get('interact_ref') !== null) {
@@ -113,7 +124,9 @@ export default defineComponent({
         state.gnap_store.gnap_server = props.server
         state.gnap_store.client_name = props.name
       }
-      state.helper = props.helper
+      // if (props.helper !== undefined) {
+        
+      // }
       state.loading = false
     })
     watch(() => props.helper, (newVal) => {

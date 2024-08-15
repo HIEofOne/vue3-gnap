@@ -55,7 +55,8 @@
     <GNAP 
       @on-authorized="showAuth"
       @jwt="showJWT"
-      helper="blue large" 
+      helper="blue large"
+      label="Sign In"
       :access="access"
       server="https://shihjay.xyz/api/as"
       name="Test Client"
