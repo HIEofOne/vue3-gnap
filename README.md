@@ -17,6 +17,8 @@ This is how it can be used:
     :access="access"
     server="https://shihjay.xyz/api/as"
     name="Test Client"
+    :show_logout=false
+    :logout="state.logout"
   />
 </div>
 ```
@@ -93,7 +95,8 @@ Make sure to include the css as indicated in the examples above!
 3.  `helper` (optional):  Button customization can be acheived by reviewing the [Beer CSS Helpers](https://github.com/beercss/beercss/blob/main/docs/HELPERS.md) to use in the helper prop for the GNAP component.  (Default: secondary)
 4.  `label` (optional): Button label (Default: Sign In to Trustee Authorization Server)
 5.  `name`: Human readable name of your GNAP Client
-
+6.  `show_logout` (optional): Boolean where true shows logout button (Default: true)
+7.  `logout` (optional): Boolean where true initiates logout function
 
 ### Callbacks:
 1. `on-authorized`: emitted when authorization is complete and JWT has been issued for future resource calls.
@@ -122,10 +125,13 @@ Example for how use the callback:
 <template>
   <GNAP @on-authorized="showAuth"
     @jwt="showJWT"
-    helper="blue large" 
+    helper="blue large"
+    label="Click This"
     :access="access"
     server="https://shihjay.xyz/api/as"
     name="Test Client"
+     :show_logout=false
+    :logout="state.logout"
   />
 </template>
 ```

@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import 'beercss'
+  import { reactive } from 'vue'
 
   async function showJWT(jwt:string) {
     console.log(jwt)
@@ -40,6 +41,14 @@
       "purpose": "Clinical - Routine"
     }
   ]
+  const state = reactive({
+    show_logout: false,
+    logout: false
+  })
+  function logout() {
+    console.log('test')
+    state.logout = true
+  }
 </script>
 
 <template>
@@ -60,7 +69,12 @@
       :access="access"
       server="https://shihjay.xyz/api/as"
       name="Test Client"
+      :show_logout=false
+      :logout="state.logout"
     />
+    <button @click="logout">
+      Other Logout Button
+    </button>
   </div>
 </template>
 

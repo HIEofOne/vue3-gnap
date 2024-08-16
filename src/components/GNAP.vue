@@ -40,7 +40,9 @@ export default defineComponent({
     label: { type: String, required: false},
     access: { type: Array, default: function () { return []}, required: true },
     server: { type: String, required: true },
-    name: { type: String, required: true }
+    name: { type: String, required: true },
+    show_logout: { type: Boolean, required: false, default: true },
+    logout: { type: Boolean, required: false}
   },
   emits: ['on-authorized', 'jwt'],
   setup (props, {emit}) {
@@ -79,7 +81,9 @@ export default defineComponent({
         const verify_results:any = await verify_jwt(state.gnap_store.jwt, props.server)
         if (verify_results.status === 'isValid') {
           state.show_button = false
-          state.show_logout = true
+          if (props.show_logout) {
+            state.show_logout = true
+          }
           emit('on-authorized')
           emit('jwt', state.gnap_store.jwt)
         } else {
@@ -102,7 +106,9 @@ export default defineComponent({
               emit('on-authorized')
               emit('jwt', continue_tx_return.data.access_token.value)
               state.show_button = false
-              state.show_logout = true
+              if (props.show_logout) {
+                state.show_logout = true
+              }
             }
           } else {
             state.show_alert = true
@@ -134,13 +140,19 @@ export default defineComponent({
         state.helper = newVal
       }
     })
+    watch(() => props.logout, async(newVal) => {
+      if (newVal) {
+        console.log('logout triggered')
+        await logout_gnap()
+      }
+    })
     watch(() => state.gnap_store, async(newVal) => {
       gnap.set(newVal)
     },{deep: true})
     const logout_gnap = async() => {
       const redirect = state.gnap_store.url
       logout()
-      await sleep(5)
+      await sleep(3)
       window.location.href = redirect
     }
     const submit = async() => {
