@@ -5,6 +5,8 @@ const defaultValue = {
   jwt: '',
   gnap_server: '',
   client_name: '',
+  rotate_token: '',
+  rotate_uri: '',
   keys: {
     publicKey: {} as JWK,
     privateKey: {} as JWK,
@@ -32,6 +34,8 @@ export type RootState = {
   jwt: string,
   gnap_server: string,
   client_name: string,
+  rotate_token: string,
+  rotate_uri: string,
   keys: {
     publicKey: JWK,
     privateKey: JWK,

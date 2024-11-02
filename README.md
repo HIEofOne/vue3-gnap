@@ -18,6 +18,8 @@ This is how it can be used:
     server="https://shihjay.xyz/api/as"
     name="Test Client"
     :show_logout=false
+    :rotate=false
+    :push_rotate="state.rotate"
     :logout="state.logout"
   />
 </div>
@@ -90,17 +92,30 @@ export default defineComponent({
 Make sure to include the css as indicated in the examples above!
 
 ### Props:
-1.  `location`: URL of the resource governed by policies set on the GNAP/PDAP authorization server.
+1.  `access`: object of resources governed by policies set on the GNAP/PDAP authorization server.  The object structure is:
+```
+[
+  {
+    "type": "App",
+    "actions": ["read", "write"],
+    "locations": ["https://nosh-app-mj3xd.ondigitalocean.app/app/chart/nosh_2c23641c-c1b4-4f5c-92e8-c749c54a34da"],
+    "purpose": "Clinical - Routine"
+  }
+]
+```
 2.  `server`:  URL of a GNAP/PDAP authorization server (Trustee).  This is typically the root domain without an endpoint/path ('/api/as/tx') as thie component figures this out based on the step of the GNAP workflow.
 3.  `helper` (optional):  Button customization can be acheived by reviewing the [Beer CSS Helpers](https://github.com/beercss/beercss/blob/main/docs/HELPERS.md) to use in the helper prop for the GNAP component.  (Default: secondary)
 4.  `label` (optional): Button label (Default: Sign In to Trustee Authorization Server)
 5.  `name`: Human readable name of your GNAP Client
 6.  `show_logout` (optional): Boolean where true shows logout button (Default: true)
-7.  `logout` (optional): Boolean where true initiates logout function
+7.  `rotate` (optional): Boolean where true enables automatic renewal of the JWT when it expires (Default: true)
+8.  `push_rotate` (optional): Boolean where true initates renewal of the JWT (Default: false)
+9. `logout` (optional): Boolean where true initiates logout function
 
 ### Callbacks:
 1. `on-authorized`: emitted when authorization is complete and JWT has been issued for future resource calls.
 2. `jwt`: emitted and returns the JWT as the first property to be used for future resource calls.
+3. `rotate-complete`: emitted when renewal of the JWT is complete
 
 Example for how use the callback:
 ```ts
@@ -130,7 +145,9 @@ Example for how use the callback:
     :access="access"
     server="https://shihjay.xyz/api/as"
     name="Test Client"
-     :show_logout=false
+    :show_logout=false
+    :rotate=false
+    :push_rotate="state.rotate"
     :logout="state.logout"
   />
 </template>

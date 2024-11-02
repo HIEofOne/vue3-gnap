@@ -53,6 +53,8 @@ export function core() {
       gnap.set(gnap_store)
       if (objectPath.has(doc, 'access_token.subject')) {
         objectPath.set(gnap_store, 'jwt', doc.access_token.value)
+        objectPath.set(gnap_store, 'rotate_token', doc.access_token.manage.access_token.value)
+        objectPath.set(gnap_store, 'rotate_uri', doc.access_token.manage.uri)
         gnap.set(gnap_store)
         const verify_results:any = await verify_jwt(doc.access_token.value, url_fix(gnap_store.gnap_server))
         if (verify_results.status === 'isValid') {
@@ -131,6 +133,8 @@ export function core() {
   const logout = () => {
     const gnap_store = gnap.get()
     objectPath.set(gnap_store, 'jwt', '')
+    objectPath.set(gnap_store, 'rotate_token', '')
+    objectPath.set(gnap_store, 'rotate_uri', '')
     objectPath.set(gnap_store, 'url', '')
     objectPath.set(gnap_store, 'interact', {
       nonce: '',
@@ -149,6 +153,49 @@ export function core() {
     })
     gnap.set(gnap_store)
     return true
+  }
+  const rotate = async(client_uri: string) => {
+    const gnap_store = gnap.get()
+    if (gnap_store.rotate_token !== '' && gnap_store.rotate_uri !== '') {
+      const signedRequest = await sign_request({}, client_uri , 'POST', gnap_store.rotate_uri, gnap_store.client_name, gnap_store.rotate_token)
+      try {
+        const doc = await fetch(signedRequest)
+          .then((res) => res.json())
+        if (objectPath.has(doc, 'access_token.subject')) {
+          objectPath.set(gnap_store, 'jwt', doc.access_token.value)
+          objectPath.set(gnap_store, 'rotate_token', doc.access_token.manage.access_token.value)
+          objectPath.set(gnap_store, 'rotate_uri', doc.access_token.manage.uri)
+          gnap.set(gnap_store)
+          const verify_results:any = await verify_jwt(doc.access_token.value, url_fix(gnap_store.gnap_server))
+          if (verify_results.status === 'isValid') {
+            return {
+              status: 'success',
+              data: doc
+            }
+          } else {
+            return {
+              status: 'error',
+              data: 'JWT not valid'
+            }
+          }
+        } else {
+          return {
+            status: 'error',
+            data: 'Access token subject missing'
+          }
+        }
+      } catch (e) {
+        return {
+          status: 'error',
+          data: e
+        }
+      }
+    } else {
+      return {
+        status: 'error',
+        data: 'No previous token'
+      }
+    }
   }
   const sign_request = async(doc:object, client_uri:string, method:string, server_uri:string, client_name:string, auth:string='') => {
     const gnap_store = gnap.get()
@@ -290,6 +337,7 @@ export function core() {
     hash,
     hex,
     logout,
+    rotate,
     sign_request,
     sleep,
     tx,

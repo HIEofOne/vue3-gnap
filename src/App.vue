@@ -27,6 +27,10 @@
   function showAuth() {
     console.log("I'm authorized!")
   }
+  function showRotateComplete() {
+    console.log("JWT renewal complete!")
+    state.rotate = false
+  }
   const access = [
     {
       "type": "Timeline",
@@ -43,11 +47,16 @@
   ]
   const state = reactive({
     show_logout: false,
-    logout: false
+    logout: false,
+    rotate: false
   })
   function logout() {
-    console.log('test')
+    console.log('test logout')
     state.logout = true
+  }
+  function rotate() {
+    console.log('test rotation')
+    state.rotate = true
   }
 </script>
 
@@ -64,16 +73,22 @@
     <GNAP 
       @on-authorized="showAuth"
       @jwt="showJWT"
+      @rotate-complete="showRotateComplete"
       helper="blue large"
       label="Sign In"
       :access="access"
       server="https://shihjay.xyz/api/as"
       name="Test Client"
       :show_logout=false
+      :rotate=true
+      :push_rotate="state.rotate"
       :logout="state.logout"
     />
     <button @click="logout">
       Other Logout Button
+    </button>
+    <button @click="rotate">
+      Push JWT Renewal
     </button>
   </div>
 </template>

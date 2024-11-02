@@ -24,7 +24,6 @@
 </template>
 
 <script lang="ts">
-// import { defineComponent, nextTick, onMounted, reactive, ref, watch, watchEffect } from 'vue'
 import { defineComponent, onMounted, reactive, watch } from 'vue'
 import { core } from '../lib/core'
 import { gnap, RootState } from '../lib/schema'
@@ -42,12 +41,13 @@ export default defineComponent({
     server: { type: String, required: true },
     name: { type: String, required: true },
     show_logout: { type: Boolean, required: false, default: true },
+    rotate: { type: Boolean, required: false, default: true },
+    push_rotate: { type: Boolean, required: false, default: false },
     logout: { type: Boolean, required: false}
   },
-  emits: ['on-authorized', 'jwt'],
+  emits: ['on-authorized', 'jwt', 'rotate-complete'],
   setup (props, {emit}) {
-    // const gnap = useGnapAuthStore()
-    const { continue_tx, logout, sleep, tx, verify_jwt } = core()
+    const { continue_tx, logout, rotate, sleep, tx, verify_jwt } = core()
     const state = reactive<{ 
       loading: boolean; 
       value: string; 
@@ -87,7 +87,11 @@ export default defineComponent({
           emit('on-authorized')
           emit('jwt', state.gnap_store.jwt)
         } else {
-          await logout_gnap()
+          if (props.rotate) {
+            await rotate_gnap()
+          } else {
+            await logout_gnap()
+          }
         }
       } else {
         state.show_button = true
@@ -146,6 +150,13 @@ export default defineComponent({
         await logout_gnap()
       }
     })
+    watch(() => props.push_rotate, async(newVal) => {
+      if (newVal) {
+        console.log('push rotate triggered')
+        await rotate_gnap()
+        emit('rotate-complete')
+      }
+    })
     watch(() => state.gnap_store, async(newVal) => {
       gnap.set(newVal)
     },{deep: true})
@@ -154,6 +165,18 @@ export default defineComponent({
       logout()
       await sleep(3)
       window.location.href = redirect
+    }
+    const rotate_gnap = async() => {
+      const current_url = new URL(window.location.href)
+      const rotate_return = await rotate(current_url.origin)
+      if (rotate_return.status === 'success') {
+        emit('on-authorized')
+        emit('jwt', rotate_return.data.access_token.value)
+        state.show_button = false
+        if (props.show_logout) {
+          state.show_logout = true
+        }
+      }
     }
     const submit = async() => {
       state.loading = true
@@ -168,6 +191,7 @@ export default defineComponent({
     return {
       gnap,
       logout_gnap,
+      rotate_gnap,
       state,
       submit
     }
