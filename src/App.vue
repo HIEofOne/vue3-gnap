@@ -11,15 +11,35 @@
         'Authorization': `Bearer ${jwt}`
       }
     }
-    const result = await fetch("https://nosh-app-mj3xd.ondigitalocean.app/api/nosh_2c23641c-c1b4-4f5c-92e8-c749c54a34da/Timeline", opts).then((res) => res.text())
-    console.log(result)
+    const result = await fetch("https://nosh-app-mj3xd.ondigitalocean.app/api/nosh_2c23641c-c1b4-4f5c-92e8-c749c54a34da/Timeline", opts).then((res) => res.json())
+    console.log(result.process)
+    let a = false
+    let b = 0
+    let md = null
+    while (!a && b < 100) {
+      await sleep(3)
+      const response = await fetch("https://nosh-app-mj3xd.ondigitalocean.app/api/nosh_2c23641c-c1b4-4f5c-92e8-c749c54a34da/Timeline?process=" + result.process, opts)
+      if (response.status === 200) {
+        a = true
+        md = await response.text()
+        console.log(md)
+      }
+      if (response.status === 404) {
+        console.log('pending')
+      }
+      if (response.status === 401) {
+        a = true
+        console.log('unauthorized')
+      }
+      b++
+    }
     const opts1 = {
       method: "PUT",
       headers: {
         'Content-type': 'application/json',
         'Authorization': `Bearer ${jwt}`
       },
-      body: JSON.stringify({content: result})
+      body: JSON.stringify({content: md})
     }
     const result1 = await fetch("https://nosh-app-mj3xd.ondigitalocean.app/api/nosh_2c23641c-c1b4-4f5c-92e8-c749c54a34da/md", opts1).then((res) => res.json())
     console.log(result1)
@@ -53,6 +73,9 @@
   function logout() {
     console.log('test logout')
     state.logout = true
+  }
+  async function sleep(seconds: number) {
+    return new Promise((resolve) => setTimeout(resolve, seconds * 1000))
   }
   function rotate() {
     console.log('test rotation')
