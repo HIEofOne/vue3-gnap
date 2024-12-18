@@ -43,6 +43,8 @@
     }
     const result1 = await fetch("https://nosh-app-mj3xd.ondigitalocean.app/api/nosh_2c23641c-c1b4-4f5c-92e8-c749c54a34da/md", opts1).then((res) => res.json())
     console.log(result1)
+    const result2 = await fetch("https://nosh-app-mj3xd.ondigitalocean.app/fhir/api/nosh_2c23641c-c1b4-4f5c-92e8-c749c54a34da/Observation", opts).then((res) => res.json())
+    console.log(result2)
   }
   function showAuth() {
     console.log("I'm authorized!")
@@ -62,6 +64,12 @@
       "type": "Markdown",
       "actions": ["write"],
       "locations": ["https://nosh-app-mj3xd.ondigitalocean.app/api/nosh_2c23641c-c1b4-4f5c-92e8-c749c54a34da/md"],
+      "purpose": "Clinical - Routine"
+    },
+    {
+      "type": "Observations",
+      "actions": ["read"],
+      "locations": ["https://nosh-app-mj3xd.ondigitalocean.app/fhir/api/nosh_2c23641c-c1b4-4f5c-92e8-c749c54a34da/Observation"],
       "purpose": "Clinical - Routine"
     }
   ]
